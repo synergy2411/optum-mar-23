@@ -8,22 +8,35 @@ let users = [
 ]
 
 let posts = [
-    { id: "p001", title: "GraphQL for Beginners", body: "Awesome post", published: true },
-    { id: "p002", title: "GraphQL 101", body: "Like it", published: false },
-    { id: "p003", title: "Mastering GraphQL", body: "Love it ♥", published: true },
-    { id: "p004", title: "GraphQL - All-in-one", body: "Not that great", published: false },
+    { id: "p001", title: "GraphQL for Beginners", body: "Awesome post", published: true, author: "u001" },
+    { id: "p002", title: "GraphQL 101", body: "Like it", published: false, author: "u002" },
+    { id: "p003", title: "Mastering GraphQL", body: "Love it ♥", published: true, author: "u003" },
+    { id: "p004", title: "GraphQL - All-in-one", body: "Not that great", published: false, author: "u001" },
+]
+
+let comments = [
+    { id: "c001", text: "Awesome blog" },
+    { id: "c002", text: "Great blog" },
+    { id: "c003", text: "Not so great blog" },
+    { id: "c004", text: "Just like that" },
 ]
 
 const typeDefs = `
     type Query {
         users : [User!]!
         posts: [Post!]!
+        comments : [Comment!]!
+    }
+    type Comment {
+        id: ID!
+        text: String!
     }
     type Post {
         id: ID!
         title: String!
         body: String!
         published : Boolean!
+        author : User!
     }
     type User {
         id : ID!
@@ -35,7 +48,13 @@ const typeDefs = `
 const resolvers = {
     Query: {
         users: () => users,
-        posts: () => posts
+        posts: () => posts,
+        comments: () => comments
+    },
+    Post: {
+        author: (parent) => {
+            return users.find(user => user.id === parent.author)
+        }
     }
 }
 
