@@ -2,7 +2,7 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 
 let users = [
-    { id: "u001", name: "john", age: 32 },
+    { id: "u001", name: "john", age: 32, },
     { id: "u002", name: "jenny", age: 34 },
     { id: "u003", name: "james", age: 35 },
 ]
@@ -15,10 +15,10 @@ let posts = [
 ]
 
 let comments = [
-    { id: "c001", text: "Awesome blog" },
-    { id: "c002", text: "Great blog" },
-    { id: "c003", text: "Not so great blog" },
-    { id: "c004", text: "Just like that" },
+    { id: "c001", text: "Awesome blog", postId: "p001", creator: "u003" },
+    { id: "c002", text: "Great blog", postId: "p002", creator: "u001" },
+    { id: "c003", text: "Not so great blog", postId: "p003", creator: "u003" },
+    { id: "c004", text: "Just like that", postId: "p002", creator: "u001" },
 ]
 
 const typeDefs = `
@@ -30,6 +30,8 @@ const typeDefs = `
     type Comment {
         id: ID!
         text: String!
+        post: Post!
+        creator: User!
     }
     type Post {
         id: ID!
@@ -37,11 +39,14 @@ const typeDefs = `
         body: String!
         published : Boolean!
         author : User!
+        comments : [Comment!]!
     }
     type User {
         id : ID!
         name: String!
         age: Int!
+        posts : [Post!]!
+        comments : [Comment!]!
     }
 `
 
@@ -54,7 +59,18 @@ const resolvers = {
     Post: {
         author: (parent) => {
             return users.find(user => user.id === parent.author)
-        }
+        },
+        comments: (parent) => comments.filter(comment => comment.postId === parent.id)
+    },
+    User: {
+        posts: (parent) => {
+            return posts.filter(post => post.author === parent.id)
+        },
+        comments: parent => comments.filter(comment => comment.creator === parent.id)
+    },
+    Comment: {
+        post: (parent) => posts.find(post => post.id === parent.postId),
+        creator: (parent) => users.find(user => user.id === parent.creator)
     }
 }
 
