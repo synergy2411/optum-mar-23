@@ -23,6 +23,10 @@ isbn, title, author
 <!-- Client -->
 
 query {
+hello
+}
+
+query {
 author{ name books { title } }
 }
 
@@ -96,3 +100,5 @@ ES6 / 2015 / ES2015 -> destructuring, arrow function, template syntax, rest / sp
 
 "CommonJS Module" system - by default in Node
 "ESM Module" System - latest module system
+
+> npm run start:dev
