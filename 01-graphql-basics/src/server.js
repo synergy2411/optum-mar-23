@@ -60,8 +60,8 @@ const typeDefs = /* GraphQL */`
 
 const resolvers = {
     Mutation: {
-        createUser: (_, args) => {
-            const { name, age } = args.data;
+        createUser: (_, { data }) => {
+            const { name, age } = data;
             let newUser = {
                 id: v4(),
                 name,
