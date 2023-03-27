@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { v4 } from 'uuid';
 
 let users = [
     { id: "u001", name: "john", age: 32, },
@@ -21,11 +22,18 @@ let comments = [
     { id: "c004", text: "Just like that", postId: "p002", creator: "u001" },
 ]
 
-const typeDefs = `
+const typeDefs = /* GraphQL */`
     type Query {
-        users : [User!]!
+        users(name: String, sort: String) : [User!]!
         posts: [Post!]!
-        comments : [Comment!]!
+        comments: [Comment!]!
+    }
+    type Mutation {
+        createUser(data: CreateUserInput) : User!
+    }
+    input CreateUserInput {
+        name: String!
+        age: Int!
     }
     type Comment {
         id: ID!
@@ -37,24 +45,57 @@ const typeDefs = `
         id: ID!
         title: String!
         body: String!
-        published : Boolean!
-        author : User!
-        comments : [Comment!]!
+        published: Boolean!
+        author: User!
+        comments: [Comment!]!
     }
     type User {
-        id : ID!
+        id: ID!
         name: String!
         age: Int!
-        posts : [Post!]!
-        comments : [Comment!]!
+        posts: [Post!]!
+        comments: [Comment!]!
     }
 `
 
 const resolvers = {
+    Mutation: {
+        createUser: (_, args) => {
+            const { name, age } = args.data;
+            let newUser = {
+                id: v4(),
+                name,
+                age
+            }
+            users.push(newUser);
+            return newUser;
+        }
+    },
     Query: {
-        users: () => users,
-        posts: () => posts,
-        comments: () => comments
+        users: (parent, args) => {
+            const { name, sort } = args;
+            let duplicateUsers = [];
+            if (name) {
+                duplicateUsers = users.filter(user => user.name.includes(name))
+            }
+
+            if (sort) {
+                const usersOne = duplicateUsers.length > 0 ? duplicateUsers : users;
+                return usersOne.sort((a, b) => {
+                    if (a[sort] > b[sort]) {
+                        return 1
+                    } else if (a[sort] < b[sort]) {
+                        return -1
+                    }
+                    else {
+                        return 0
+                    }
+                })
+            }
+            return users
+        },
+        posts: (parent) => posts,
+        comments: (parent) => comments
     },
     Post: {
         author: (parent) => {

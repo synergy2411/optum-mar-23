@@ -19,6 +19,7 @@
   "dependencies": {
     "@apollo/server": "^4.5.0",
     "graphql": "^16.6.0",
-    "graphql-yoga": "^3.7.3"
+    "graphql-yoga": "^3.7.3",
+    "uuid": "^9.0.0"
   }
 }
