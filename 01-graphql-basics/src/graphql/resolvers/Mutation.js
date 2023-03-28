@@ -1,14 +1,14 @@
 import { v4 } from 'uuid';
-import db from '../../model/db';
+
 const Mutation = {
-    createUser: (_, { data }) => {
+    createUser: (_, { data }, context) => {
         const { name, age } = data;
         let newUser = {
             id: v4(),
             name,
             age
         }
-        db.users.push(newUser);
+        context.db.users.push(newUser);
         return newUser;
     }
 }

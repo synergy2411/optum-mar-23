@@ -1,9 +1,9 @@
-import db from '../../model/db';
+
 const User = {
-    posts: (parent) => {
+    posts: (parent, args, { db }) => {
         return db.posts.filter(post => post.author === parent.id)
     },
-    comments: parent => db.comments.filter(comment => comment.creator === parent.id)
+    comments: (parent, args, { db }) => db.comments.filter(comment => comment.creator === parent.id)
 }
 
 export { User }

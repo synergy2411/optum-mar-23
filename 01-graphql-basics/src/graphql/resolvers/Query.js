@@ -1,6 +1,6 @@
-import db from '../../model/db';
+
 const Query = {
-    users: (parent, args) => {
+    users: (parent, args, { db }) => {
         const { name, sort } = args;
         let duplicateUsers = [];
         if (name) {
@@ -22,8 +22,8 @@ const Query = {
         }
         return db.users
     },
-    posts: (parent) => db.posts,
-    comments: (parent) => db.comments
+    posts: (parent, args, { db }) => db.posts,
+    comments: (parent, args, { db }) => db.comments
 }
 
 export { Query }
