@@ -6,6 +6,8 @@ const typeDefs = /* GraphQL */`
     }
     type Mutation {
         createUser(data: CreateUserInput) : User!
+        updateUser(userId: ID!, age: Int!): User!
+        deleteUser(userId: ID!) : User!
     }
     input CreateUserInput {
         name: String!
