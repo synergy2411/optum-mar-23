@@ -118,3 +118,5 @@ mongodb+srv://synergy:UCZLeRPIiF9CWo72@cluster0.e9xsq.mongodb.net/optum-db
 
 synergy
 UCZLeRPIiF9CWo72
+
+mongodb+srv://<username>:<password>@cluster0.e9xsq.mongodb.net/my-db
