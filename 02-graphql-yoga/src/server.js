@@ -3,6 +3,7 @@ import { createYoga } from 'graphql-yoga';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
+import "./db"
 
 const app = express()
 

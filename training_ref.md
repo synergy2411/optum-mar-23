@@ -113,3 +113,8 @@ signUp / register -> email, password, age -> Mongo DB -> Generate JWT Token -> S
 signIn / login -> email, password -> verify user from DB -> generate JWT -> Send JWT to client
 
 posts (Protected resource) -> need to attach JWT Token to access protected resource
+
+mongodb+srv://synergy:UCZLeRPIiF9CWo72@cluster0.e9xsq.mongodb.net/optum-db
+
+synergy
+UCZLeRPIiF9CWo72
