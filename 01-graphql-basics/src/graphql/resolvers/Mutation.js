@@ -23,6 +23,8 @@ const Mutation = {
     deleteUser: (_, { userId }, { db }) => {
         const position = db.users.findIndex(user => user.id === userId)
         if (position >= 0) {
+            // Need to delete the post and comments created by the deleted user
+            // Need to delete comments which are made on the posts created by the user
             const [deletedUser] = db.users.splice(position, 1)
             return deletedUser;
         }
@@ -43,6 +45,15 @@ const Mutation = {
         }
         throw new GraphQLError("Unable to locate user for ID - " + userId)
     },
+    deletePost: (_, { postId }, { db }) => {
+        const position = db.posts.findIndex(post => post.id === postId)
+        if (position === -1) {
+            throw new GraphQLError("Post not found for ID - " + postId)
+        }
+        const [deletedPost] = db.posts.splice(position, 1)
+        db.comments = db.comments.filter(comment => comment.postId !== postId)
+        return deletedPost;
+    },
     createComment: (_, { text, creator, postId }, { db }) => {
         const userPosition = db.users.findIndex(user => user.id === creator)
         if (userPosition === -1) {
@@ -62,6 +73,14 @@ const Mutation = {
 
         db.comments.push(newComment);
         return newComment;
+    },
+    deleteComment: (_, { commentId }, { db }) => {
+        const position = db.comments.findIndex(comment => comment.id === commentId);
+        if (position === -1) {
+            throw new Error("Comment not found for ID - " + commentId)
+        }
+        const [deletedComment] = db.comments.splice(position, 1)
+        return deletedComment;
     }
 }
 
