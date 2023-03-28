@@ -5,7 +5,12 @@ import { sign, verify } from 'jsonwebtoken';
 import PostModel from '../../model/post.model';
 import UserModel from "../../model/user.model";
 
-const SECRET_KEY = "MY_SUPER_SECRET";
+import { config } from 'dotenv';
+
+config();
+
+const { SECRET_KEY } = process.env;
+
 
 const Mutation = {
     registerUser: async (parent, args, context) => {
@@ -35,7 +40,7 @@ const Mutation = {
                 throw new GraphQLError("Bad Credentials")
             }
 
-            const token = sign({ id: userFound._doc._id }, SECRET_KEY)
+            const token = sign({ id: userFound._doc._id }, SECRET_KEY, { expiresIn: "180" })
             return { token, email }
 
         } catch (err) {
@@ -51,7 +56,6 @@ const Mutation = {
             const { id } = verify(token, SECRET_KEY)
             const newPost = new PostModel({ title, body, author: id });
             const createdPost = await newPost.save()
-            console.log(createdPost);
             return { id: createdPost._doc._id, ...createdPost._doc }
         } catch (err) {
             throw new GraphQLError(err.message)

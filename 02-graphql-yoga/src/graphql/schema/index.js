@@ -2,6 +2,7 @@
 const typeDefs = /* GraphQL */ `
     type Query {
         hello: String!
+        posts: [Post!]!
     }
     type Mutation {
         registerUser(data: RegisterUserInput!): AuthPayload!
