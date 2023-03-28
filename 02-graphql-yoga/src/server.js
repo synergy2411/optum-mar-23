@@ -10,7 +10,17 @@ const app = express()
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 const yoga = createYoga({
-    schema
+    schema,
+    context: ({ req, res }) => {
+        const authHeader = req.headers["authorization"]                // "Bearer tokenValue"
+        let token = null;
+        if (authHeader) {
+            token = authHeader.split(" ")[1]            //["Bearer", "tokenValue"]
+        }
+        return {
+            token
+        }
+    }
 })
 
 app.use("/graphql", yoga)

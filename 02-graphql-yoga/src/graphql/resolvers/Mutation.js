@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
 import { hash, compare } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 
 import PostModel from '../../model/post.model';
 import UserModel from "../../model/user.model";
@@ -42,10 +42,14 @@ const Mutation = {
             throw new GraphQLError(err.message)
         }
     },
-    createPost: async (_, args) => {
+    createPost: async (_, args, { token }) => {
+        if (!token) {
+            throw new GraphQLError("Auth required")
+        }
         try {
             const { title, body } = args.data;
-            const newPost = new PostModel({ title, body, author: "6422c0daf46238c28288f84d" });
+            const { id } = verify(token, SECRET_KEY)
+            const newPost = new PostModel({ title, body, author: id });
             const createdPost = await newPost.save()
             console.log(createdPost);
             return { id: createdPost._doc._id, ...createdPost._doc }
