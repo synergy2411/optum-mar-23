@@ -54,7 +54,7 @@ books: [
   > Query
 
         : Scalar Type : ID Int String Boolean Float
-        : Complex Type : Product User Employee
+        : Complex Type : Product User Employee Post Comment
 
   > Mutation
   > Subscription
@@ -69,7 +69,7 @@ books: [
 - Schema
   > typeDefs
   > resolvers
-- Query Types (Query, Mutation, Subs)
+- Query Types (Query, Mutation, Subscription)
 
 # geenrate package.json file
 
