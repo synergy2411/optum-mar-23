@@ -106,3 +106,10 @@ ES6 / 2015 / ES2015 -> destructuring, arrow function, template syntax, rest / sp
 "ESM Module" System - latest module system
 
 > npm run start:dev
+
+Mutation
+signUp / register -> email, password, age -> Mongo DB -> Generate JWT Token -> Send JWT to client
+
+signIn / login -> email, password -> verify user from DB -> generate JWT -> Send JWT to client
+
+posts (Protected resource) -> need to attach JWT Token to access protected resource
