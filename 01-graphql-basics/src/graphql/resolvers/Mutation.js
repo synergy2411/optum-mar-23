@@ -23,8 +23,15 @@ const Mutation = {
     deleteUser: (_, { userId }, { db }) => {
         const position = db.users.findIndex(user => user.id === userId)
         if (position >= 0) {
-            // Need to delete the post and comments created by the deleted user
-            // Need to delete comments which are made on the posts created by the user
+            db.posts = db.posts.filter(post => {
+                const isMatch = post.author === userId
+                if (isMatch) {
+                    db.comments = db.comments.filter(comment => comment.postId !== post.id)
+                }
+                return !isMatch;
+            })
+
+            db.comments = db.comments.filter(comment => comment.creator !== userId)
             const [deletedUser] = db.users.splice(position, 1)
             return deletedUser;
         }
