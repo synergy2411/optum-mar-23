@@ -2,43 +2,9 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { v4 } from 'uuid';
 import db from './model/db';
+import typeDefs from './graphql/schema';
 
 
-const typeDefs = /* GraphQL */`
-    type Query {
-        users(name: String, sort: String) : [User!]!
-        posts: [Post!]!
-        comments: [Comment!]!
-    }
-    type Mutation {
-        createUser(data: CreateUserInput) : User!
-    }
-    input CreateUserInput {
-        name: String!
-        age: Int!
-    }
-    type Comment {
-        id: ID!
-        text: String!
-        post: Post!
-        creator: User!
-    }
-    type Post {
-        id: ID!
-        title: String!
-        body: String!
-        published: Boolean!
-        author: User!
-        comments: [Comment!]!
-    }
-    type User {
-        id: ID!
-        name: String!
-        age: Int!
-        posts: [Post!]!
-        comments: [Comment!]!
-    }
-`
 
 const resolvers = {
     Mutation: {
