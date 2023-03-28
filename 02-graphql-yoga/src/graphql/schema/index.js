@@ -5,9 +5,14 @@ const typeDefs = /* GraphQL */ `
     }
     type Mutation {
         registerUser(data: RegisterUserInput!): AuthPayload!
+        loginUser(data: LoginUserInput!) : AuthPayload!
+    }
+    input LoginUserInput{ 
+        email: String!
+        password: String!
     }
     type AuthPayload{
-        message: String!
+        token: String!
         email: String!
     }
     input RegisterUserInput {
