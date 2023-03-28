@@ -8,6 +8,13 @@ const typeDefs = /* GraphQL */`
         createUser(data: CreateUserInput) : User!
         updateUser(userId: ID!, age: Int!): User!
         deleteUser(userId: ID!) : User!
+        createPost(authorId: ID!, data: CreatePostInput!) : Post!
+        createComment(text: String!, creator: ID!, postId: ID!): Comment!
+    }
+
+    input CreatePostInput {
+        title: String!
+        body: String!
     }
     input CreateUserInput {
         name: String!

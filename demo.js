@@ -19,3 +19,10 @@ let context = {
 let { db } = context;
 
 console.log(db)
+
+
+let friends = ["foo", "bar", "bam"];
+
+let [f1, f2, f3] = friends;
+
+console.log(f1);            // "bar"
