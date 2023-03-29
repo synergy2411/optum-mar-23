@@ -6,7 +6,7 @@ import resolvers from './graphql/resolvers';
 import "./db"
 
 const app = express()
-
+const PORT = process.env.PORT || 4001;
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 const pubsub = createPubSub();
@@ -27,6 +27,6 @@ const yoga = createYoga({
 
 app.use("/graphql", yoga)
 
-app.listen(4001, () => console.log("Server running on PORT : 4001"))
+app.listen(PORT, () => console.log("Server running on PORT :" + PORT))
 
 // http://localhost:4001/graphql

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon --exec babel-node src/server.js"
+    "start:dev": "nodemon --exec babel-node src/server.js",
+    "build": "babel -d ./dist ./src -s",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "SK",
