@@ -1,5 +1,5 @@
 import express from 'express';
-import { createYoga } from 'graphql-yoga';
+import { createYoga, createPubSub } from 'graphql-yoga';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
@@ -8,6 +8,8 @@ import "./db"
 const app = express()
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
+
+const pubsub = createPubSub();
 
 const yoga = createYoga({
     schema,
@@ -18,7 +20,7 @@ const yoga = createYoga({
             token = authHeader.split(" ")[1]            //["Bearer", "tokenValue"]
         }
         return {
-            token
+            token, pubsub
         }
     }
 })

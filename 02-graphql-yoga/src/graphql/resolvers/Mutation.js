@@ -40,14 +40,14 @@ const Mutation = {
                 throw new GraphQLError("Bad Credentials")
             }
 
-            const token = sign({ id: userFound._doc._id }, SECRET_KEY, { expiresIn: "180" })
+            const token = sign({ id: userFound._doc._id }, SECRET_KEY)
             return { token, email }
 
         } catch (err) {
             throw new GraphQLError(err.message)
         }
     },
-    createPost: async (_, args, { token }) => {
+    createPost: async (_, args, { token, pubsub }) => {
         if (!token) {
             throw new GraphQLError("Auth required")
         }
@@ -56,6 +56,14 @@ const Mutation = {
             const { id } = verify(token, SECRET_KEY)
             const newPost = new PostModel({ title, body, author: id });
             const createdPost = await newPost.save()
+
+            pubsub.publish("POST_CHANNEL", {
+                postSub: {
+                    message: "CREATED",
+                    post: createdPost
+                }
+            })
+
             return { id: createdPost._doc._id, ...createdPost._doc }
         } catch (err) {
             throw new GraphQLError(err.message)

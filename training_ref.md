@@ -120,3 +120,17 @@ synergy
 UCZLeRPIiF9CWo72
 
 mongodb+srv://<username>:<password>@cluster0.e9xsq.mongodb.net/my-db
+
+GraphQL Yoga Server
+Mongo Atlas -> Mongoose Library
+Register / Login -> JWT Token -> jsonwebtoken
+Protected Resource - createPosts (Mutation) ->
+Unprotected resource - posts (Query) ->
+
+- Subscription : Real time updates; continuous channel; PubSub Pattern
+- Frontend App (React)
+- Boilerplate project
+- Deployment
+- Tips / Tricks
+
+MERN Stack App
