@@ -68,6 +68,35 @@ const Mutation = {
         } catch (err) {
             throw new GraphQLError(err.message)
         }
+    },
+    deletePost: async (_, args, { token, pubsub }) => {
+        try {
+            if (!token) {
+                throw new GraphQLError("Auth required")
+            }
+            const foundPost = await PostModel.findById(args.postId)
+            if (!foundPost) {
+                throw new GraphQLError("Unable to find Post Id -" + args.postId)
+            }
+
+            const { id } = await verify(token, SECRET_KEY)
+            const isMatch = id === foundPost._doc.author.toString();
+            if (!isMatch) {
+                throw new GraphQLError("Unable to delete the Post. Unknown Author.")
+            }
+
+            const deletedPost = await PostModel.findByIdAndDelete(args.postId)
+            pubsub.publish("POST_CHANNEL", {
+                postSub: {
+                    message: "DELETED",
+                    post: deletedPost
+                }
+            })
+            return foundPost;
+        } catch (err) {
+            throw new GraphQLError(err.message)
+        }
+
     }
 }
 

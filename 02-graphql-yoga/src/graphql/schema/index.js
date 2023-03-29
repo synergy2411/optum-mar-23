@@ -8,14 +8,20 @@ const typeDefs = /* GraphQL */ `
         registerUser(data: RegisterUserInput!): AuthPayload!
         loginUser(data: LoginUserInput!) : AuthPayload!
         createPost(data: CreatePostInput!) : Post!
+        deletePost(postId: ID!) : Post!
     }
     type Subscription {
         count: Int!
         postSub: PostSubscriptionPayload! 
     }
     type PostSubscriptionPayload {
-        message: String!
+        message: PostMessageSubscription!
         post: Post!
+    }
+    enum PostMessageSubscription{
+        CREATED
+        DELETED
+        UPDATED
     }
     input CreatePostInput {
         title: String!
