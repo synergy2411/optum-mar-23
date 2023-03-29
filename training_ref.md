@@ -129,6 +129,11 @@ Unprotected resource - posts (Query) ->
 
 - Subscription : Real time updates; continuous channel; PubSub Pattern
 - Frontend App (React)
+
+  > npx create-react-app frontend
+  > cd frontend
+  > npm start
+
 - Boilerplate project
 - Deployment
 - Tips / Tricks
