@@ -3,7 +3,8 @@ import { GraphQLError } from 'graphql'
 
 const Query = {
     hello: () => "World",
-    posts: async () => {
+    posts: async (_, args, { token }) => {
+        console.log("TOKEN : ", token);
         try {
             const allPost = await PostModel.find()
             return allPost;

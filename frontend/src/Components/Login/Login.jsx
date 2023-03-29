@@ -9,11 +9,23 @@ const USER_LOGIN = gql`
   }
 `;
 
+const CREATE_POST = gql`
+  mutation {
+    createPost(data: { title: "Post created from React", body: "...." }) {
+      id
+      title
+      body
+    }
+  }
+`;
+
 const Login = () => {
   const [enteredEmail, setEmail] = useState("");
   const [enteredPassword, setPassword] = useState("");
+  const [show, setShow] = useState(false);
 
   const [userLogin, { data, loading, error }] = useMutation(USER_LOGIN);
+  const [createPost, { data: postData }] = useMutation(CREATE_POST);
 
   if (loading) {
     return <h3>Loading...</h3>;
@@ -26,18 +38,28 @@ const Login = () => {
   const loginClickHandler = async (event) => {
     event.preventDefault();
     try {
-      await userLogin({
+      const { data } = await userLogin({
         variables: {
           email: enteredEmail,
           password: enteredPassword,
         },
       });
+      console.log(data);
       localStorage.setItem("token", data.loginUser.token);
+      setShow(true);
     } catch (err) {
       console.log(err);
     }
   };
 
+  const createPostHandler = async (event) => {
+    event.preventDefault();
+    try {
+      await createPost();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="row">
       <div className="col-6 offset-3">
@@ -69,13 +91,28 @@ const Login = () => {
               </div>
               {/* buttons */}
               <div className="form-group">
-                <div className="d-grid">
-                  <button
-                    className="btn btn-primary"
-                    onClick={loginClickHandler}
-                  >
-                    Login
-                  </button>
+                <div className="row">
+                  <div className="col-6">
+                    <div className="d-grid">
+                      <button
+                        className="btn btn-primary"
+                        onClick={loginClickHandler}
+                      >
+                        Login
+                      </button>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="d-grid">
+                      <button
+                        className="btn btn-secondary"
+                        onClick={createPostHandler}
+                        disabled={!show}
+                      >
+                        Create Post
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
