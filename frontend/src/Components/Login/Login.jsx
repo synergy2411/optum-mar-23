@@ -1,21 +1,30 @@
 import { useMutation, gql } from "@apollo/client";
+import { useState } from "react";
 
 const USER_LOGIN = gql`
-  mutation {
-    loginUser(data: { email: "foo@test", password: "foo123" }) {
+  mutation login($email: String!, $password: String!) {
+    loginUser(data: { email: $email, password: $password }) {
       token
     }
   }
 `;
 
 const Login = () => {
+  const [enteredEmail, setEmail] = useState("");
+  const [enteredPassword, setPassword] = useState("");
+
   const [userLogin] = useMutation(USER_LOGIN);
 
   const loginClickHandler = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await userLogin();
-      console.log("TOKEN : ", data.loginUser.token);
+      const { data, loading, error } = await userLogin({
+        variables: {
+          email: enteredEmail,
+          password: enteredPassword,
+        },
+      });
+      localStorage.setItem("token", data.loginUser.token);
     } catch (err) {
       console.log(err);
     }
@@ -31,7 +40,13 @@ const Login = () => {
               {/* email */}
               <div className="form-group mb-3">
                 <label htmlFor="email">Email:</label>
-                <input type="email" name="email" className="form-control" />
+                <input
+                  type="email"
+                  name="email"
+                  className="form-control"
+                  value={enteredEmail}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
               </div>
               {/* password */}
               <div className="form-group mb-3">
@@ -40,6 +55,8 @@ const Login = () => {
                   type="password"
                   name="password"
                   className="form-control"
+                  value={enteredPassword}
+                  onChange={(event) => setPassword(event.target.value)}
                 />
               </div>
               {/* buttons */}
