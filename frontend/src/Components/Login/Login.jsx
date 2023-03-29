@@ -13,12 +13,20 @@ const Login = () => {
   const [enteredEmail, setEmail] = useState("");
   const [enteredPassword, setPassword] = useState("");
 
-  const [userLogin] = useMutation(USER_LOGIN);
+  const [userLogin, { data, loading, error }] = useMutation(USER_LOGIN);
+
+  if (loading) {
+    return <h3>Loading...</h3>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   const loginClickHandler = async (event) => {
     event.preventDefault();
     try {
-      const { data, loading, error } = await userLogin({
+      await userLogin({
         variables: {
           email: enteredEmail,
           password: enteredPassword,
